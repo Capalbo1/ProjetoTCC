@@ -63,6 +63,7 @@
     white-space:nowrap;font-weight:500;line-height:1.25;
   }
   .tabnav-title small{display:block;font-family:var(--font-body);font-size:10.5px;font-weight:500;letter-spacing:0.08em;color:var(--chalk-yellow);text-transform:uppercase;}
+  .nav-tabs{display:flex;align-items:center;gap:6px;}
   .tab-btn{
     appearance:none;border:none;background:transparent;cursor:pointer;
     color:rgba(251,248,241,0.72);font-family:var(--font-body);font-size:14.5px;
@@ -73,9 +74,56 @@
   .tab-btn.active{color:var(--paper);}
   .tab-btn:focus-visible{outline:2px solid var(--chalk-yellow);outline-offset:2px;}
   .tab-indicator{
-    position:absolute;bottom:10px;height:2px;background:var(--chalk-yellow);border-radius:2px;
+    position:absolute;left:0;bottom:10px;height:2px;background:var(--chalk-yellow);border-radius:2px;
     transition:transform .32s cubic-bezier(.65,0,.35,1),width .32s cubic-bezier(.65,0,.35,1);
     transform:translateX(0);width:0;
+  }
+  .nav-login{
+    appearance:none;background:transparent;cursor:pointer;font-family:var(--font-body);
+    margin-left:auto;flex:none;display:flex;align-items:center;gap:6px;
+    padding:8px 16px;border:1.5px solid var(--chalk-yellow);border-radius:999px;
+    color:var(--paper);font-size:13.5px;font-weight:500;white-space:nowrap;
+    transition:background .2s ease,color .2s ease;
+  }
+  .nav-login:hover{background:var(--chalk-yellow);color:var(--chalk-bg-2);}
+  .nav-login:focus-visible{outline:2px solid var(--chalk-yellow);outline-offset:2px;}
+  .nav-login svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none;}
+
+  .nav-toggle{
+    display:none;appearance:none;background:transparent;border:none;cursor:pointer;
+    flex:none;width:36px;height:36px;padding:0;align-items:center;justify-content:center;
+    flex-direction:column;gap:5px;
+  }
+  .nav-toggle .burger-line{
+    display:block;width:20px;height:2px;background:var(--chalk-yellow);border-radius:2px;
+    transition:transform .25s ease,opacity .2s ease;
+  }
+  .nav-toggle.open .burger-line:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .nav-toggle.open .burger-line:nth-child(2){opacity:0;}
+  .nav-toggle.open .burger-line:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+  .nav-toggle:focus-visible{outline:2px solid var(--chalk-yellow);outline-offset:2px;}
+
+  @media (max-width:760px){
+    #tabnavInner{overflow:visible;}
+    .nav-brand{flex:1 1 auto;min-width:0;overflow:hidden;border-right:none;margin-right:0;}
+    .tabnav-title{overflow:hidden;text-overflow:ellipsis;}
+    .nav-toggle{display:flex;}
+    .nav-tabs{
+      display:none;position:absolute;top:100%;left:0;right:0;
+      flex-direction:column;align-items:stretch;gap:0;
+      background:var(--chalk-bg-2);border-bottom:1px solid rgba(232,197,71,0.25);
+      padding:6px 0 10px;box-shadow:0 16px 28px rgba(0,0,0,0.28);
+    }
+    .nav-tabs.open{display:flex;}
+    .tab-indicator{display:none;}
+    .tab-btn{width:100%;text-align:left;padding:14px 28px;}
+    .tab-btn.active{background:rgba(232,197,71,0.12);color:var(--chalk-yellow);}
+  }
+
+  @media (max-width:480px){
+    .tabnav-title small{display:none;}
+    .nav-login span{display:none;}
+    .nav-login{padding:8px;}
   }
 
   /* Hero */
@@ -116,6 +164,19 @@
   .year-arrow{width:20px;height:26px;margin-top:8px;stroke:var(--chalk-yellow);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0;animation:arrowFade .4s ease 1.7s forwards, arrowBounce 1.4s ease-in-out 1.7s infinite;}
   @keyframes arrowFade{to{opacity:0.9;}}
   @keyframes arrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(7px);}}
+
+  .hero-title-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+  .hero-title-col{flex:1;min-width:260px;}
+  .decline-chart{width:120px;height:84px;flex:none;overflow:visible;margin-top:22px;}
+  .decline-chart .chart-line,.decline-chart .chart-arrow{
+    fill:none;stroke:var(--pen-red);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:1;stroke-dashoffset:1;
+  }
+  .decline-chart .chart-dot{fill:var(--chalk-yellow);opacity:0;transition:opacity .25s ease .95s;}
+  .decline-chart.draw .chart-line{animation:drawCircle 1s ease-out forwards;}
+  .decline-chart.draw .chart-arrow{animation:drawCircle .3s ease-out .9s forwards;}
+  .decline-chart.draw .chart-dot{opacity:1;}
+  @media (max-width:640px){.decline-chart{width:90px;height:64px;}}
 
   .hero h1{font-size:clamp(30px,5vw,46px);line-height:1.15;max-width:17ch;letter-spacing:-0.01em;margin-top:22px;min-height:3.45em;}
   .chalk-cursor{display:inline-block;width:3px;height:0.85em;background:var(--chalk-yellow);margin-left:3px;vertical-align:-0.08em;animation:blink 0.9s steps(1) infinite;}
@@ -162,6 +223,9 @@
   }
   .callout p{font-family:var(--font-display);font-size:18px;line-height:1.5;color:var(--ink);}
   .callout span{display:block;margin-top:10px;font-size:13px;color:var(--ink-soft);}
+
+  .section-head{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+  .letterhead-logo{height:44px;width:auto;flex:none;}
 
   h2.section-title{font-size:28px;position:relative;display:inline-block;padding-bottom:10px;}
   .title-underline{display:block;margin-bottom:22px;width:180px;height:12px;}
@@ -280,12 +344,15 @@
   @media (prefers-reduced-motion:reduce){
     html{scroll-behavior:auto;}
     .tab-panel.active,.chalk-dust i,.chalk-cursor,.year-stamp path,.year-stamp span,.year-arrow,
-    .hero-underline path,.title-underline path,.reveal{animation:none !important;transition:none !important;}
+    .hero-underline path,.title-underline path,.reveal,
+    .decline-chart .chart-line,.decline-chart .chart-arrow,.decline-chart .chart-dot{animation:none !important;transition:none !important;}
     .reveal{opacity:1;transform:none;}
     .year-stamp path{stroke-dashoffset:0;}
     .year-stamp span{opacity:1;}
     .year-arrow{opacity:0.9;}
     .hero-underline path,.title-underline path{stroke-dashoffset:0;}
+    .decline-chart .chart-line,.decline-chart .chart-arrow{stroke-dashoffset:0;}
+    .decline-chart .chart-dot{opacity:1;}
   }
 </style>
 </head>
@@ -297,12 +364,23 @@
       <img src="assets/univesp-logo.svg" alt="UNIVESP" class="nav-logo">
       <span class="tabnav-title">Defasagem em Matemática<small>TCC · 2026</small></span>
     </div>
-    <button class="tab-btn active" data-tab="sobre" role="tab" aria-selected="true">Sobre</button>
-    <button class="tab-btn" data-tab="objetivos" role="tab" aria-selected="false">Objetivos</button>
-    <button class="tab-btn" data-tab="produto" role="tab" aria-selected="false">Produto</button>
-    <button class="tab-btn" data-tab="equipe" role="tab" aria-selected="false">Equipe</button>
-    <button class="tab-btn" data-tab="cronograma" role="tab" aria-selected="false">Cronograma</button>
-    <div class="tab-indicator" id="tabIndicator" aria-hidden="true"></div>
+    <div class="nav-tabs" id="navTabs">
+      <button class="tab-btn active" data-tab="sobre" role="tab" aria-selected="true">Sobre</button>
+      <button class="tab-btn" data-tab="objetivos" role="tab" aria-selected="false">Objetivos</button>
+      <button class="tab-btn" data-tab="produto" role="tab" aria-selected="false">Produto</button>
+      <button class="tab-btn" data-tab="equipe" role="tab" aria-selected="false">Equipe</button>
+      <button class="tab-btn" data-tab="cronograma" role="tab" aria-selected="false">Cronograma</button>
+      <div class="tab-indicator" id="tabIndicator" aria-hidden="true"></div>
+    </div>
+    <button type="button" class="nav-login" aria-label="Entrar no sistema — em breve">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5h4.3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H6"/><path d="M9.3 8H1.3m0 0 3-3m-3 3 3 3"/></svg>
+      <span>Entrar</span>
+    </button>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="navTabs">
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+      <span class="burger-line"></span>
+    </button>
   </div>
 </nav>
 
@@ -324,8 +402,22 @@
         <svg class="year-arrow" viewBox="0 0 24 30"><path d="M12 2 L12 24 M4 16 L12 26 L20 16"/></svg>
       </div>
     </div>
-    <h1 id="heroTitle" aria-label="Defasagem em Matemática no Estado de São Paulo"><span id="heroTitleText" data-text="Defasagem em Matemática no Estado de São Paulo"></span><span class="chalk-cursor" id="heroCursor" aria-hidden="true"></span></h1>
-    <svg class="hero-underline" id="heroUnderline" viewBox="0 0 200 18"><path d="M4,10 C40,2 70,14 100,7 C130,1 160,12 196,8" pathLength="1"/></svg>
+    <div class="hero-title-row">
+      <div class="hero-title-col">
+        <h1 id="heroTitle" aria-label="Defasagem em Matemática no Estado de São Paulo"><span id="heroTitleText" data-text="Defasagem em Matemática no Estado de São Paulo"></span><span class="chalk-cursor" id="heroCursor" aria-hidden="true"></span></h1>
+        <svg class="hero-underline" id="heroUnderline" viewBox="0 0 200 18"><path d="M4,10 C40,2 70,14 100,7 C130,1 160,12 196,8" pathLength="1"/></svg>
+      </div>
+      <svg class="decline-chart" id="heroChart" viewBox="0 0 130 90" aria-hidden="true">
+        <path class="chart-line" d="M8,14 L32,32 L52,24 L74,52 L96,44 L118,76" pathLength="1"/>
+        <path class="chart-arrow" d="M104,68 L118,76 L112,90" pathLength="1"/>
+        <circle class="chart-dot" cx="8" cy="14" r="3"/>
+        <circle class="chart-dot" cx="32" cy="32" r="3"/>
+        <circle class="chart-dot" cx="52" cy="24" r="3"/>
+        <circle class="chart-dot" cx="74" cy="52" r="3"/>
+        <circle class="chart-dot" cx="96" cy="44" r="3"/>
+        <circle class="chart-dot" cx="118" cy="76" r="3.5"/>
+      </svg>
+    </div>
     <p class="hero-sub reveal" id="heroSub">Reconhecimento numérico e domínio das quatro operações básicas: por que tantos estudantes chegam ao 6º ano sem essa base, e o que um produto educacional pode fazer a respeito.</p>
     <div class="stat-note reveal" id="heroStat">
       <strong>6 em cada 10 jovens</strong>
@@ -338,7 +430,10 @@
 
   <section id="sobre" class="tab-panel active">
     <div class="wrap">
-      <h2 class="section-title">Sobre o projeto</h2>
+      <div class="section-head">
+        <h2 class="section-title">Sobre o projeto</h2>
+        <img src="assets/univesp-logo-color.png" alt="UNIVESP" class="letterhead-logo">
+      </div>
       <svg class="title-underline" viewBox="0 0 180 12"><path d="M3,7 C40,1 90,10 130,4 C150,1 165,6 177,3" pathLength="1"/></svg>
       <p class="section-lead">A transição do 5º para o 6º ano concentra um dos pontos mais críticos da educação básica brasileira: é quando fica evidente que muitos alunos não consolidaram o sistema numérico nem as quatro operações. Essa lacuna não desaparece sozinha — ela se arrasta pelos anos seguintes e trava a aprendizagem de conteúdos mais avançados, como frações e álgebra.</p>
       <p class="section-lead">Este projeto investiga as causas dessa defasagem a partir de literatura acadêmica, dados oficiais do INEP e do SARESP, e da experiência de professores de matemática, para então propor um produto educacional voltado à recomposição dessas aprendizagens.</p>
@@ -492,12 +587,40 @@
     document.documentElement.style.setProperty('--nav-h', tabnav.offsetHeight + 'px');
   }
 
+  /* ---- Mobile hamburger menu ---- */
+  const navTabs = document.getElementById('navTabs');
+  const navToggle = document.getElementById('navToggle');
+
+  function closeMobileMenu(){
+    navTabs.classList.remove('open');
+    navToggle.classList.remove('open');
+    navToggle.setAttribute('aria-expanded','false');
+  }
+
+  navToggle.addEventListener('click', ()=>{
+    const isOpen = navTabs.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+  document.addEventListener('click', (e)=>{
+    if(navTabs.classList.contains('open') && !navTabs.contains(e.target) && !navToggle.contains(e.target)){
+      closeMobileMenu();
+    }
+  });
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape' && navTabs.classList.contains('open')){
+      closeMobileMenu();
+      navToggle.focus();
+    }
+  });
+
   tabs.forEach(btn=>{
     btn.addEventListener('click', ()=>{
       tabs.forEach(b=>{b.classList.remove('active'); b.setAttribute('aria-selected','false');});
       panels.forEach(p=>p.classList.remove('active'));
       btn.classList.add('active');
       btn.setAttribute('aria-selected','true');
+      closeMobileMenu();
       const target = document.getElementById(btn.dataset.tab);
       if(target){
         target.classList.add('active');
@@ -545,12 +668,14 @@
   const titleEl = document.getElementById('heroTitleText');
   const cursorEl = document.getElementById('heroCursor');
   const underlineEl = document.getElementById('heroUnderline');
+  const chartEl = document.getElementById('heroChart');
   const subEl = document.getElementById('heroSub');
   const statEl = document.getElementById('heroStat');
   const fullText = titleEl.getAttribute('data-text');
 
   function revealRest(){
     underlineEl.classList.add('draw');
+    chartEl.classList.add('draw');
     setTimeout(()=>{ subEl.classList.add('in'); }, 250);
     setTimeout(()=>{ statEl.classList.add('in'); }, 550);
   }
@@ -559,6 +684,7 @@
     titleEl.textContent = fullText;
     cursorEl.style.display = 'none';
     underlineEl.classList.add('draw');
+    chartEl.classList.add('draw');
     subEl.classList.add('in');
     statEl.classList.add('in');
   } else {
