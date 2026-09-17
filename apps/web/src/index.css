@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* Mesma identidade visual "lousa e giz" da página de apresentação
+   (index.html na raiz do repo) — mantenha os dois em sincronia. */
+@theme {
+  --color-chalk-bg: #1d3b2f;
+  --color-chalk-bg-2: #16281f;
+  --color-paper: #fbf8f1;
+  --color-paper-2: #f1ebdb;
+  --color-ink: #242220;
+  --color-ink-soft: #5b564c;
+  --color-chalk-yellow: #e8c547;
+  --color-pen-red: #c1443c;
+  --color-line: #ddd5be;
+
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  --font-chalk: "Caveat", "Segoe Script", cursive;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+}

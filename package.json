@@ -1,0 +1,19 @@
+{
+  "name": "projeto-tcc-defasagem-matematica",
+  "private": true,
+  "description": "Sistema de diagnóstico e recomposição de aprendizagem em matemática — monorepo (web, api, pacotes compartilhados).",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace apps/web",
+    "dev:api": "npm run dev --workspace apps/api",
+    "build:web": "npm run build --workspace apps/web",
+    "build:api": "npm run build --workspace apps/api",
+    "build": "npm run build --workspace packages/shared && npm run build:web && npm run build:api"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
