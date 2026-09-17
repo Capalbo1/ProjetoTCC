@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="pt-BR" style="color-scheme:light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defasagem em Matemática no Estado de São Paulo — Projeto de TCC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --chalk-bg:#1D3B2F;
+    --chalk-bg-2:#16281F;
+    --paper:#FBF8F1;
+    --paper-2:#F1EBDB;
+    --ink:#242220;
+    --ink-soft:#5B564C;
+    --chalk-yellow:#E8C547;
+    --pen-red:#C1443C;
+    --line:#DDD5BE;
+    --radius:14px;
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    --font-chalk:'Caveat', 'Segoe Script', cursive;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.65;
+  }
+  h1,h2,h3{font-family:var(--font-display);font-weight:600;margin:0;color:inherit;}
+  p{margin:0;}
+  a{color:inherit;}
+  .wrap{max-width:980px;margin:0 auto;padding:0 28px;}
+
+  /* subtle paper grain everywhere */
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:0.035;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* Sticky tab nav */
+  .tabnav{
+    position:sticky;top:0;z-index:20;
+    background:var(--chalk-bg-2);
+    border-bottom:1px solid rgba(232,197,71,0.25);
+  }
+  .tabnav-inner{
+    max-width:980px;margin:0 auto;padding:0 28px;
+    display:flex;align-items:center;gap:6px;position:relative;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .tabnav-inner::-webkit-scrollbar{display:none;}
+  .nav-brand{display:flex;align-items:center;gap:10px;padding:12px 18px 12px 0;margin-right:8px;border-right:1px solid rgba(251,248,241,0.18);flex:none;}
+  .nav-logo{height:22px;width:auto;flex:none;opacity:0.95;}
+  .tabnav-title{
+    color:var(--paper);font-family:var(--font-display);font-size:15px;
+    white-space:nowrap;font-weight:500;line-height:1.25;
+  }
+  .tabnav-title small{display:block;font-family:var(--font-body);font-size:10.5px;font-weight:500;letter-spacing:0.08em;color:var(--chalk-yellow);text-transform:uppercase;}
+  .tab-btn{
+    appearance:none;border:none;background:transparent;cursor:pointer;
+    color:rgba(251,248,241,0.72);font-family:var(--font-body);font-size:14.5px;
+    padding:18px 14px;white-space:nowrap;position:relative;font-weight:500;
+    transition:color .15s ease;
+  }
+  .tab-btn:hover{color:var(--paper);}
+  .tab-btn.active{color:var(--paper);}
+  .tab-btn:focus-visible{outline:2px solid var(--chalk-yellow);outline-offset:2px;}
+  .tab-indicator{
+    position:absolute;bottom:10px;height:2px;background:var(--chalk-yellow);border-radius:2px;
+    transition:transform .32s cubic-bezier(.65,0,.35,1),width .32s cubic-bezier(.65,0,.35,1);
+    transform:translateX(0);width:0;
+  }
+
+  /* Hero */
+  .hero{background:var(--chalk-bg);color:var(--paper);position:relative;overflow:hidden;}
+  .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:0.5;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .hero-glyphs{position:absolute;inset:0;pointer-events:none;opacity:0.08;font-family:var(--font-display);color:var(--paper);}
+  .hero-glyphs span{position:absolute;font-size:130px;}
+  .chalk-dust{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
+  .chalk-dust i{position:absolute;display:block;border-radius:50%;background:rgba(251,248,241,0.55);filter:blur(0.4px);animation:dustFloat linear infinite;opacity:0;}
+  .chalk-dust i:nth-child(1){width:3px;height:3px;top:22%;left:12%;animation-duration:8s;animation-delay:.2s;}
+  .chalk-dust i:nth-child(2){width:2px;height:2px;top:65%;left:22%;animation-duration:10s;animation-delay:1.4s;}
+  .chalk-dust i:nth-child(3){width:4px;height:4px;top:40%;left:48%;animation-duration:9s;animation-delay:.8s;}
+  .chalk-dust i:nth-child(4){width:2px;height:2px;top:78%;left:60%;animation-duration:11s;animation-delay:2.2s;}
+  .chalk-dust i:nth-child(5){width:3px;height:3px;top:15%;left:74%;animation-duration:7.5s;animation-delay:.5s;}
+  .chalk-dust i:nth-child(6){width:2px;height:2px;top:55%;left:85%;animation-duration:9.5s;animation-delay:1.9s;}
+  .chalk-dust i:nth-child(7){width:3px;height:3px;top:88%;left:36%;animation-duration:8.5s;animation-delay:3s;}
+  @keyframes dustFloat{
+    0%{transform:translateY(0) translateX(0);opacity:0;}
+    12%{opacity:.55;}
+    50%{transform:translateY(-22px) translateX(8px);opacity:.3;}
+    88%{opacity:0;}
+    100%{transform:translateY(-42px) translateX(-6px);opacity:0;}
+  }
+  .hero-inner{position:relative;padding:64px 28px 88px;max-width:980px;margin:0 auto;}
+  .hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  .hero-kicker{font-size:14px;color:rgba(251,248,241,0.75);max-width:40ch;padding-top:6px;}
+  .year-stamp-wrap{display:flex;flex-direction:column;align-items:center;flex:none;}
+  .year-stamp{position:relative;flex:none;width:84px;height:84px;display:flex;align-items:center;justify-content:center;transform:rotate(-6deg);}
+  .year-stamp svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;}
+  .year-stamp path{fill:none;stroke:var(--chalk-yellow);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:drawCircle 1.1s ease-out 1.1s forwards;}
+  .year-stamp span{font-family:var(--font-chalk);font-size:26px;font-weight:700;color:var(--paper);opacity:0;animation:stampFade .5s ease 1.5s forwards;}
+  @keyframes drawCircle{to{stroke-dashoffset:0;}}
+  @keyframes stampFade{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+
+  .year-arrow{width:20px;height:26px;margin-top:8px;stroke:var(--chalk-yellow);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0;animation:arrowFade .4s ease 1.7s forwards, arrowBounce 1.4s ease-in-out 1.7s infinite;}
+  @keyframes arrowFade{to{opacity:0.9;}}
+  @keyframes arrowBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(7px);}}
+
+  .hero h1{font-size:clamp(30px,5vw,46px);line-height:1.15;max-width:17ch;letter-spacing:-0.01em;margin-top:22px;min-height:3.45em;}
+  .chalk-cursor{display:inline-block;width:3px;height:0.85em;background:var(--chalk-yellow);margin-left:3px;vertical-align:-0.08em;animation:blink 0.9s steps(1) infinite;}
+  .chalk-cursor.done{animation:blink 0.9s steps(1) infinite;opacity:0.85;}
+  @keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
+  #heroTitleText:empty::before{content:attr(data-text);}
+
+  .hero-underline{display:block;margin-top:6px;width:min(420px,80vw);height:18px;}
+  .hero-underline path{fill:none;stroke:var(--pen-red);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:0.85;}
+  .hero-underline.draw path{animation:drawCircle 0.9s ease-out forwards;}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  .hero-sub{margin-top:16px;font-size:17px;color:rgba(251,248,241,0.85);max-width:56ch;}
+  .stat-note{
+    margin-top:40px;background:var(--paper);color:var(--ink);
+    display:inline-block;max-width:400px;padding:24px 24px 22px;
+    border-radius:3px;transform:rotate(-1.6deg);position:relative;
+    box-shadow:0 14px 28px rgba(0,0,0,0.32);
+    border-left:4px solid var(--pen-red);
+    transition:transform .25s ease;
+  }
+  .stat-note:hover{transform:rotate(-1.6deg) translateY(-3px);}
+  .stat-note::before{
+    content:"";position:absolute;top:-9px;left:28px;width:14px;height:14px;border-radius:50%;
+    background:var(--chalk-yellow);box-shadow:0 3px 6px rgba(0,0,0,0.35), inset 0 -2px 3px rgba(0,0,0,0.2);
+  }
+  .stat-note strong{display:block;font-family:var(--font-display);font-size:27px;font-weight:600;color:var(--pen-red);line-height:1.25;}
+  .stat-note span{display:block;margin-top:8px;font-size:13.5px;color:var(--ink-soft);}
+
+  /* Panels */
+  main{background:var(--paper);}
+  .tab-panel{display:none;padding:56px 28px 80px;scroll-margin-top:var(--nav-h,64px);}
+  .tab-panel.active{display:block;animation:fadein .35s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+  .section-lead{font-size:19px;line-height:1.7;max-width:62ch;color:var(--ink);}
+  .section-lead + .section-lead{margin-top:16px;}
+
+  .callout{
+    margin-top:32px;background:var(--paper-2);border-left:4px solid var(--chalk-yellow);
+    border-radius:0 var(--radius) var(--radius) 0;padding:22px 26px;max-width:64ch;
+  }
+  .callout p{font-family:var(--font-display);font-size:18px;line-height:1.5;color:var(--ink);}
+  .callout span{display:block;margin-top:10px;font-size:13px;color:var(--ink-soft);}
+
+  h2.section-title{font-size:28px;position:relative;display:inline-block;padding-bottom:10px;}
+  .title-underline{display:block;margin-bottom:22px;width:180px;height:12px;}
+  .title-underline path{fill:none;stroke:var(--pen-red);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;}
+  .tab-panel.active .title-underline path{animation:drawCircle .7s ease-out .15s forwards;}
+
+  /* Objetivos */
+  .obj-list{list-style:none;margin:28px 0 0;padding:0;max-width:64ch;}
+  .obj-list li{
+    display:flex;gap:14px;padding:14px 4px;border-top:1px solid var(--line);
+    font-size:16px;transition:background .2s ease, transform .2s ease;border-radius:6px;
+  }
+  .obj-list li:hover{background:var(--paper-2);transform:translateX(4px);}
+  .obj-list li:last-child{border-bottom:1px solid var(--line);}
+  .obj-list li::before{
+    content:"";flex:none;width:8px;height:8px;border-radius:50%;
+    background:var(--pen-red);margin-top:9px;
+  }
+
+  /* Produto — posicionamento */
+  .positioning-banner{
+    margin-top:32px;max-width:70ch;background:var(--paper-2);border-radius:var(--radius);
+    padding:22px 26px;position:relative;border-left:4px solid var(--pen-red);
+  }
+  .positioning-banner p{font-size:15.5px;line-height:1.7;color:var(--ink);}
+  .positioning-banner p + p{margin-top:12px;}
+  .positioning-banner strong{color:var(--pen-red);}
+
+  .subsection-title{
+    font-family:var(--font-body);font-size:12.5px;font-weight:600;letter-spacing:0.09em;
+    text-transform:uppercase;color:var(--ink-soft);margin-top:48px;
+  }
+
+  /* Produto steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:24px;}
+  .step{position:relative;padding:20px 18px 0;border-top:3px solid var(--chalk-bg);transition:transform .2s ease;}
+  .step:hover{transform:translateY(-4px);}
+  .step-num{font-family:var(--font-chalk);font-size:34px;color:var(--chalk-bg);font-weight:700;}
+  .step h3{font-size:16px;margin-top:4px;}
+  .step p{font-size:13.5px;color:var(--ink-soft);margin-top:6px;line-height:1.5;}
+  @media (max-width:720px){.steps{grid-template-columns:1fr 1fr;row-gap:28px;}}
+
+  .diff-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px;}
+  .diff-card{
+    border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;background:var(--paper);
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;position:relative;
+  }
+  .diff-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,0,0,0.08);border-color:var(--chalk-yellow);}
+  .diff-card .diff-tag{
+    display:inline-block;font-family:var(--font-chalk);font-size:15px;font-weight:600;color:var(--pen-red);
+    margin-bottom:6px;
+  }
+  .diff-card h3{font-size:16px;margin-bottom:8px;}
+  .diff-card p{font-size:13.5px;color:var(--ink-soft);line-height:1.6;}
+  .diff-card cite{font-style:normal;color:var(--ink);}
+  @media (max-width:720px){.diff-grid{grid-template-columns:1fr;}}
+
+  .product-note{
+    margin-top:40px;max-width:66ch;background:var(--chalk-bg);color:var(--paper);
+    border-radius:var(--radius);padding:26px 28px;position:relative;overflow:hidden;
+  }
+  .product-note::before{
+    content:"";position:absolute;inset:0;pointer-events:none;opacity:0.5;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+  .product-note h3{font-size:15px;color:var(--chalk-yellow);margin-bottom:10px;font-family:var(--font-body);font-weight:600;position:relative;}
+  .product-note p{font-size:15px;color:rgba(251,248,241,0.9);position:relative;}
+
+  /* Equipe */
+  .polo-line{margin-top:10px;font-size:14.5px;color:var(--ink-soft);max-width:60ch;}
+  .advisor-card{
+    margin-top:30px;display:flex;align-items:center;gap:16px;
+    background:var(--paper-2);border-radius:var(--radius);padding:18px 22px;max-width:520px;
+    transition:transform .2s ease,box-shadow .2s ease;
+  }
+  .advisor-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,0,0,0.08);}
+  .team-grid{
+    margin-top:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px;
+  }
+  .team-card{
+    border:1px solid var(--line);border-radius:var(--radius);padding:18px;
+    display:flex;align-items:center;gap:14px;background:var(--paper);
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+  }
+  .team-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px rgba(0,0,0,0.08);border-color:var(--chalk-yellow);}
+  .avatar{
+    flex:none;width:52px;height:52px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--paper);font-family:var(--font-display);font-size:17px;font-weight:600;
+  }
+  .team-card p{font-weight:500;font-size:15px;}
+  .team-card span{display:block;font-size:12.5px;color:var(--ink-soft);margin-top:2px;}
+  .photo-note{margin-top:20px;font-size:13px;color:var(--ink-soft);max-width:56ch;}
+
+  /* Cronograma */
+  .timeline{margin-top:32px;max-width:70ch;position:relative;}
+  .tl-item{display:grid;grid-template-columns:110px 1fr;gap:20px;padding:18px 0;border-top:1px solid var(--line);transition:background .2s ease;border-radius:6px;}
+  .tl-item:hover{background:var(--paper-2);}
+  .tl-item:last-child{border-bottom:1px solid var(--line);}
+  .tl-date{font-size:13px;color:var(--pen-red);font-weight:500;padding-top:2px;}
+  .tl-item h3{font-size:15.5px;margin-bottom:4px;}
+  .tl-item p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+
+  footer{background:var(--chalk-bg-2);color:rgba(251,248,241,0.7);padding:34px 28px;}
+  .footer-inner{max-width:980px;margin:0 auto;font-size:13px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;justify-content:space-between;}
+  .footer-brand{display:flex;align-items:center;gap:10px;}
+  .footer-logo{height:18px;width:auto;opacity:0.85;}
+  .footer-links{display:flex;flex-wrap:wrap;gap:8px 18px;}
+
+  @media (max-width:640px){
+    .hero-inner{padding:48px 22px 64px;}
+    .tab-panel{padding:40px 22px 60px;}
+    .hero-top{flex-direction:row-reverse;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .tab-panel.active,.chalk-dust i,.chalk-cursor,.year-stamp path,.year-stamp span,.year-arrow,
+    .hero-underline path,.title-underline path,.reveal{animation:none !important;transition:none !important;}
+    .reveal{opacity:1;transform:none;}
+    .year-stamp path{stroke-dashoffset:0;}
+    .year-stamp span{opacity:1;}
+    .year-arrow{opacity:0.9;}
+    .hero-underline path,.title-underline path{stroke-dashoffset:0;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="tabnav" role="tablist" aria-label="Seções do projeto">
+  <div class="tabnav-inner" id="tabnavInner">
+    <div class="nav-brand">
+      <img src="assets/univesp-logo.svg" alt="UNIVESP" class="nav-logo">
+      <span class="tabnav-title">Defasagem em Matemática<small>TCC · 2026</small></span>
+    </div>
+    <button class="tab-btn active" data-tab="sobre" role="tab" aria-selected="true">Sobre</button>
+    <button class="tab-btn" data-tab="objetivos" role="tab" aria-selected="false">Objetivos</button>
+    <button class="tab-btn" data-tab="produto" role="tab" aria-selected="false">Produto</button>
+    <button class="tab-btn" data-tab="equipe" role="tab" aria-selected="false">Equipe</button>
+    <button class="tab-btn" data-tab="cronograma" role="tab" aria-selected="false">Cronograma</button>
+    <div class="tab-indicator" id="tabIndicator" aria-hidden="true"></div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-glyphs" aria-hidden="true">
+    <span style="top:-20px; left:-10px;">+</span>
+    <span style="top:120px; right:-20px;">÷</span>
+    <span style="bottom:-40px; left:38%;">×</span>
+  </div>
+  <div class="chalk-dust" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="hero-inner">
+    <div class="hero-top">
+      <p class="hero-kicker">Trabalho de Conclusão de Curso, Licenciatura em Matemática, UNIVESP</p>
+      <div class="year-stamp-wrap" aria-hidden="true">
+        <div class="year-stamp">
+          <svg viewBox="0 0 100 100"><path d="M50,8 C72,4 94,22 92,50 C94,78 72,96 50,92 C26,96 6,78 8,50 C6,22 26,4 50,8 Z" pathLength="1"/></svg>
+          <span>2026</span>
+        </div>
+        <svg class="year-arrow" viewBox="0 0 24 30"><path d="M12 2 L12 24 M4 16 L12 26 L20 16"/></svg>
+      </div>
+    </div>
+    <h1 id="heroTitle" aria-label="Defasagem em Matemática no Estado de São Paulo"><span id="heroTitleText" data-text="Defasagem em Matemática no Estado de São Paulo"></span><span class="chalk-cursor" id="heroCursor" aria-hidden="true"></span></h1>
+    <svg class="hero-underline" id="heroUnderline" viewBox="0 0 200 18"><path d="M4,10 C40,2 70,14 100,7 C130,1 160,12 196,8" pathLength="1"/></svg>
+    <p class="hero-sub reveal" id="heroSub">Reconhecimento numérico e domínio das quatro operações básicas: por que tantos estudantes chegam ao 6º ano sem essa base, e o que um produto educacional pode fazer a respeito.</p>
+    <div class="stat-note reveal" id="heroStat">
+      <strong>6 em cada 10 jovens</strong>
+      <span>terminam o ensino médio na rede pública sem aprender o básico em matemática, segundo reportagem do G1 (2026) com base em avaliações recentes.</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section id="sobre" class="tab-panel active">
+    <div class="wrap">
+      <h2 class="section-title">Sobre o projeto</h2>
+      <svg class="title-underline" viewBox="0 0 180 12"><path d="M3,7 C40,1 90,10 130,4 C150,1 165,6 177,3" pathLength="1"/></svg>
+      <p class="section-lead">A transição do 5º para o 6º ano concentra um dos pontos mais críticos da educação básica brasileira: é quando fica evidente que muitos alunos não consolidaram o sistema numérico nem as quatro operações. Essa lacuna não desaparece sozinha — ela se arrasta pelos anos seguintes e trava a aprendizagem de conteúdos mais avançados, como frações e álgebra.</p>
+      <p class="section-lead">Este projeto investiga as causas dessa defasagem a partir de literatura acadêmica, dados oficiais do INEP e do SARESP, e da experiência de professores de matemática, para então propor um produto educacional voltado à recomposição dessas aprendizagens.</p>
+      <div class="callout">
+        <p>Quais são as causas da defasagem em matemática relacionadas ao reconhecimento numérico e ao domínio das quatro operações básicas, e quais estratégias pedagógicas poderiam ser aplicadas para a recomposição da aprendizagem?</p>
+        <span>Pergunta de pesquisa que orienta o trabalho</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="objetivos" class="tab-panel">
+    <div class="wrap">
+      <h2 class="section-title">Objetivos</h2>
+      <svg class="title-underline" viewBox="0 0 180 12"><path d="M3,7 C40,1 90,10 130,4 C150,1 165,6 177,3" pathLength="1"/></svg>
+      <p class="section-lead">Analisar as causas da defasagem em matemática ligadas ao reconhecimento numérico e às quatro operações básicas, propondo estratégias pedagógicas para sua recomposição.</p>
+      <ul class="obj-list">
+        <li>Identificar fatores socioeconômicos que contribuem para a defasagem escolar.</li>
+        <li>Caracterizar práticas docentes que favorecem ou dificultam a aprendizagem.</li>
+        <li>Analisar aspectos cognitivos e emocionais que influenciam o desempenho dos estudantes.</li>
+        <li>Avaliar metodologias de recomposição já aplicadas em sala de aula.</li>
+        <li>Propor um produto educacional voltado à melhoria da aprendizagem em matemática.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="produto" class="tab-panel">
+    <div class="wrap">
+      <h2 class="section-title">Produto educacional</h2>
+      <svg class="title-underline" viewBox="0 0 180 12"><path d="M3,7 C40,1 90,10 130,4 C150,1 165,6 177,3" pathLength="1"/></svg>
+      <p class="section-lead">Um sistema de diagnóstico e recomposição das aprendizagens, organizado em quatro etapas e cobrindo reconhecimento numérico, adição, subtração, multiplicação, divisão e integração das operações.</p>
+
+      <div class="positioning-banner">
+        <p><strong>"Prática gamificada com feedback de IA" já é o padrão da indústria hoje, não a exceção.</strong> Duolingo, Khan Academy, Prodigy, ALEKS, IXL — todo grande nome do edtech de matemática já faz diagnóstico, progressão adaptativa, gamificação e algum tipo de IA generativa.</p>
+        <p>Não estamos propondo mais um passarinho verde de matemática. O diferencial deste produto está em seis escolhas de design que nascem diretamente dos achados desta pesquisa.</p>
+      </div>
+
+      <p class="subsection-title">Como funciona</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><h3>Diagnóstico</h3><p>Identifica o que o aluno já sabe e onde estão as principais dificuldades.</p></div>
+        <div class="step"><div class="step-num">2</div><h3>Recomposição</h3><p>Atividades progressivas, do conteúdo mais básico ao mais complexo.</p></div>
+        <div class="step"><div class="step-num">3</div><h3>Prática</h3><p>Exercícios interativos e gamificados para revisão e consolidação.</p></div>
+        <div class="step"><div class="step-num">4</div><h3>Avaliação</h3><p>Compara o desempenho antes e depois para medir a evolução real.</p></div>
+      </div>
+
+      <p class="subsection-title">O que nos diferencia</p>
+      <div class="diff-grid">
+        <div class="diff-card">
+          <span class="diff-tag">01</span>
+          <h3>Diagnóstico da causa, não só do erro</h3>
+          <p>A maioria dos apps só registra acerto ou erro. Aqui, a IA classifica a causa segundo a taxonomia de <cite>Silva (2018)</cite>, já citada nesta pesquisa: erro epistemológico (o conceito não foi compreendido), didático (foi mal ensinado) ou psicológico (ansiedade, insegurança). O produto deixa de ser um app de exercícios e passa a ser uma ferramenta de diagnóstico pedagógico real.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-tag">02</span>
+          <h3>Copiloto do professor, não app do aluno</h3>
+          <p>O centro de gravidade não é a experiência do aluno sozinho: é um painel que revela padrões invisíveis à correção manual — "60% da turma erra subtração com reagrupamento, e o erro é sempre o mesmo." Ataca direto o achado desta pesquisa de que professores nem sempre percebem que erros em conteúdo "fácil" vêm de lacunas antigas.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-tag">03</span>
+          <h3>Avaliação silenciosa</h3>
+          <p>Sem prova de diagnóstico formal. A IA infere as lacunas observando o desempenho nas atividades normais, sem nunca parecer um teste — reduzindo a ansiedade que <cite>Schoen et al. (2025)</cite> associam diretamente à defasagem.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-tag">04</span>
+          <h3>Desenhado para baixo recurso</h3>
+          <p>Esta pesquisa aponta alunos de baixa renda como grupo de maior risco de defasagem, mas quase todo concorrente assume internet boa e aparelho recente. O produto é pensado para funcionar offline, em Android antigo e com pouco dado — equidade como escolha de design, não como reboque.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-tag">05</span>
+          <h3>IA sob demanda para o professor</h3>
+          <p>O professor descreve o erro que viu em sala — "a turma trocou multiplicação por adição num problema de agrupamento" — e a IA gera, na hora, uma lista de exercícios específicos para aquilo. Economiza o recurso mais escasso da escola pública: o tempo do professor.</p>
+        </div>
+        <div class="diff-card">
+          <span class="diff-tag">06</span>
+          <h3>Offline primeiro, IA depois</h3>
+          <p>Em sala, sem sinal, o app registra respostas, fotos e marcações do professor normalmente. Quando a conexão volta, tudo sincroniza — e só então a IA classifica os erros por tipo e gera o relatório da turma.</p>
+        </div>
+      </div>
+
+      <div class="product-note">
+        <h3>Em desenvolvimento</h3>
+        <p>Estamos evoluindo o produto para uma plataforma que roda na sala de aula real da escola pública: o professor registra o que vê, a IA classifica os erros pela causa — não só pelo resultado — e devolve, sob demanda, material e relatórios de turma que economizam o tempo mais escasso da escola pública.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="equipe" class="tab-panel">
+    <div class="wrap">
+      <h2 class="section-title">Equipe</h2>
+      <svg class="title-underline" viewBox="0 0 180 12"><path d="M3,7 C40,1 90,10 130,4 C150,1 165,6 177,3" pathLength="1"/></svg>
+      <p class="polo-line">Grupo formado por integrantes dos polos de Cesário Lange, Guarujá, Poá, São Paulo, Tatuí e Viradouro.</p>
+
+      <div class="advisor-card">
+        <div class="avatar" style="background:#3E5C76;">AF</div>
+        <div><p>Arthur Ribeiro Fontes</p><span>Orientador</span></div>
+      </div>
+
+      <div class="team-grid" id="team-grid"></div>
+      <p class="photo-note">Fotos dos integrantes ainda não adicionadas — os círculos acima mostram as iniciais de cada um como espaço reservado até substituirmos por fotos reais.</p>
+    </div>
+  </section>
+
+  <section id="cronograma" class="tab-panel">
+    <div class="wrap">
+      <h2 class="section-title">Cronograma</h2>
+      <svg class="title-underline" viewBox="0 0 180 12"><path d="M3,7 C40,1 90,10 130,4 C150,1 165,6 177,3" pathLength="1"/></svg>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-date">10/08 – 23/08</div><div><h3>Decisão do produto</h3><p>Definição do produto educacional a ser desenvolvido pelo grupo.</p></div></div>
+        <div class="tl-item"><div class="tl-date">24/08 – 06/09</div><div><h3>Escrita do projeto</h3><p>Redação do projeto de pesquisa e seleção dos autores de referência.</p></div></div>
+        <div class="tl-item"><div class="tl-date">07/09 – 20/09</div><div><h3>Levantamento bibliográfico</h3><p>Pesquisa de referências com indicação de potencial aplicação prática.</p></div></div>
+        <div class="tl-item"><div class="tl-date">21/09 – 04/10</div><div><h3>Metodologia</h3><p>Estruturação da metodologia e do plano de coleta e análise de dados.</p></div></div>
+        <div class="tl-item"><div class="tl-date">05/10 – 10/10</div><div><h3>Entrega 2</h3><p>Escrita da versão de entrega 2 e consolidação da metodologia.</p></div></div>
+        <div class="tl-item"><div class="tl-date">19/10 – 01/11</div><div><h3>Coleta e análise</h3><p>Coleta e análise dos dados e resultados; finalização e revisão do texto.</p></div></div>
+        <div class="tl-item"><div class="tl-date">02/11 – 15/11</div><div><h3>Entrega final</h3><p>Entrega do trabalho de conclusão de curso finalizado.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="assets/univesp-logo.svg" alt="UNIVESP" class="footer-logo">
+      <span>Licenciatura em Matemática — UNIVESP, 2026</span>
+    </div>
+    <div class="footer-links">
+      <span>Orientador: Arthur Ribeiro Fontes</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- Tabs + sliding indicator ---- */
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  const indicator = document.getElementById('tabIndicator');
+  const tabnavInner = document.getElementById('tabnavInner');
+
+  function moveIndicator(btn){
+    if(!btn) return;
+    const btnRect = btn.getBoundingClientRect();
+    const wrapRect = tabnavInner.getBoundingClientRect();
+    indicator.style.width = (btnRect.width - 28) + 'px';
+    indicator.style.transform = 'translateX(' + (btn.offsetLeft + 14) + 'px)';
+  }
+
+  const tabnav = document.querySelector('.tabnav');
+  function syncNavHeight(){
+    document.documentElement.style.setProperty('--nav-h', tabnav.offsetHeight + 'px');
+  }
+
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>{b.classList.remove('active'); b.setAttribute('aria-selected','false');});
+      panels.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected','true');
+      const target = document.getElementById(btn.dataset.tab);
+      if(target){
+        target.classList.add('active');
+        const scrollToTarget = () => target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        if(document.fonts && document.fonts.status !== 'loaded'){
+          document.fonts.ready.then(scrollToTarget);
+        }
+        scrollToTarget();
+      }
+      moveIndicator(btn);
+    });
+  });
+  syncNavHeight();
+  moveIndicator(document.querySelector('.tab-btn.active'));
+  window.addEventListener('resize', ()=>{
+    syncNavHeight();
+    moveIndicator(document.querySelector('.tab-btn.active'));
+  });
+  window.addEventListener('load', ()=>{
+    syncNavHeight();
+    moveIndicator(document.querySelector('.tab-btn.active'));
+  });
+
+  /* ---- Team grid ---- */
+  const team = [
+    {name:'Cláudia Brito da Cunha', color:'#2F5745'},
+    {name:'Emerson Eidi Sato', color:'#C1443C'},
+    {name:'Gabriel Henrique Pinto Rossi', color:'#C98A3B'},
+    {name:'Gustavo Borges Santos', color:'#3E5C76'},
+    {name:'Gustavo Capalbo dos Santos', color:'#2F5745'},
+    {name:'Leandro Rodrigues', color:'#C1443C'},
+    {name:'Luis Cláudio Ferreira dos Santos', color:'#C98A3B'},
+    {name:'Raquel Farias Queiroz', color:'#3E5C76'}
+  ];
+  const grid = document.getElementById('team-grid');
+  team.forEach(person=>{
+    const initials = person.name.split(' ').filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+    const card = document.createElement('div');
+    card.className = 'team-card';
+    card.innerHTML = `<div class="avatar" style="background:${person.color};">${initials}</div><div><p>${person.name}</p><span>Integrante</span></div>`;
+    grid.appendChild(card);
+  });
+
+  /* ---- Chalk "being written" hero title ---- */
+  const titleEl = document.getElementById('heroTitleText');
+  const cursorEl = document.getElementById('heroCursor');
+  const underlineEl = document.getElementById('heroUnderline');
+  const subEl = document.getElementById('heroSub');
+  const statEl = document.getElementById('heroStat');
+  const fullText = titleEl.getAttribute('data-text');
+
+  function revealRest(){
+    underlineEl.classList.add('draw');
+    setTimeout(()=>{ subEl.classList.add('in'); }, 250);
+    setTimeout(()=>{ statEl.classList.add('in'); }, 550);
+  }
+
+  if(reduceMotion){
+    titleEl.textContent = fullText;
+    cursorEl.style.display = 'none';
+    underlineEl.classList.add('draw');
+    subEl.classList.add('in');
+    statEl.classList.add('in');
+  } else {
+    let i = 0;
+    (function typeStep(){
+      if(i <= fullText.length){
+        titleEl.textContent = fullText.slice(0, i);
+        i++;
+        setTimeout(typeStep, 32 + Math.random()*40);
+      } else {
+        cursorEl.classList.add('done');
+        revealRest();
+      }
+    })();
+  }
+</script>
+
+</body>
+</html>
